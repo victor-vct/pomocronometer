@@ -7,7 +7,7 @@ import android.util.Log;
 /**
  * Created by formadoresdosaber on 01/02/16.
  */
-public class Cronometer extends IntentService implements ControlCronometer {
+public class Cronometer implements ControlCronometer {
 
     private long timeInMillis = 1000 * 60;
     private long currentTime = 0;
@@ -15,13 +15,9 @@ public class Cronometer extends IntentService implements ControlCronometer {
     private StatusCronometer STATUS = StatusCronometer.Started;
     private static final String CRONO = "Crono_service";
 
-    public Cronometer(){
-        super("Cronometer");
-    }
-
     @Override
-    protected void onHandleIntent(Intent intent) {
-        Log.d(CRONO, "Cronometer started...");
+    public void start() {
+        STATUS = StatusCronometer.Started;
         if(STATUS == StatusCronometer.Started) {
             currentTime = System.currentTimeMillis();
             while (cronometer < timeInMillis) {
@@ -40,17 +36,18 @@ public class Cronometer extends IntentService implements ControlCronometer {
     }
 
     @Override
-    public void start() {
-        if(STATUS == StatusCronometer.Stoped){
-            STATUS = StatusCronometer.Started;
-        }
-    }
-
-    @Override
     public void stop() {
         if(STATUS == StatusCronometer.Started){
             STATUS = StatusCronometer.Stoped;
         }
+    }
+
+    @Override
+    public boolean isStarted() {
+        if(STATUS == StatusCronometer.Started){
+            return true;
+        }
+        return false;
     }
 
     public void setTime(long timeInMillis){

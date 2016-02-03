@@ -7,4 +7,5 @@ public interface ControlCronometer {
 
     void start();
     void stop();
+    boolean isStarted();
 }

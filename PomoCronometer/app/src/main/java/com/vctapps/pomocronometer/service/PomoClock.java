@@ -5,16 +5,22 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.widget.TextView;
 
 /**
  * Created by Victor on 02/02/2016.
  */
 public class PomoClock extends Service implements ControlCronometer {
 
+    private TextView clock;
     private Cronometer cronometer;
+    private CurrentPomo currentPomo = CurrentPomo.First;
+    private boolean nextBreak = false;
+    private final long breakTime = 1000 * 60 * 5;
+    private final long pomoTime = 1000 * 60 * 25;
 
     public PomoClock(){
-        cronometer = new Cronometer();
+        cronometer = new Cronometer(onFinish());
     }
 
     public class CronoBinder extends Binder {
@@ -33,16 +39,24 @@ public class PomoClock extends Service implements ControlCronometer {
     public void start() {
         if(cronometer != null){
             if(!cronometer.isStarted()) {
+                nextPomo();
                 cronometer.start();
             }
         }
     }
 
     @Override
+    public void onStart(TextView clock) {
+        this.clock = clock;
+        cronometer.onStart(clock);
+    }
+
+    @Override
     public void stop() {
         if(cronometer != null){
-            if(!cronometer.isStarted()){
+            if(cronometer.isStarted()){
                 cronometer.stop();
+                reset();
             }
         }
     }
@@ -50,5 +64,64 @@ public class PomoClock extends Service implements ControlCronometer {
     @Override
     public boolean isStarted() {
         return cronometer != null ? cronometer.isStarted() : false;
+    }
+
+    private void nextPomo(){
+        switch (currentPomo){
+            case First:
+                if(nextBreak){
+                    cronometer.setTime(breakTime);
+                }else {
+                    cronometer.setTime(pomoTime);
+                    currentPomo = CurrentPomo.Second;
+                }
+                cronometer.start();
+                nextBreak = !nextBreak;
+                break;
+            case Second:
+                if(nextBreak){
+                    cronometer.setTime(breakTime);
+                }else {
+                    cronometer.setTime(pomoTime);
+                    currentPomo = CurrentPomo.Third;
+                }
+                cronometer.start();
+                nextBreak = !nextBreak;
+                break;
+            case Third:
+                if(nextBreak){
+                    cronometer.setTime(breakTime);
+                }else {
+                    cronometer.setTime(pomoTime);
+                    currentPomo = CurrentPomo.Fourt;
+                }
+                cronometer.start();
+                nextBreak = !nextBreak;
+                break;
+            case Fourt:
+                if(nextBreak){
+                    cronometer.setTime(breakTime + 2);
+                }else {
+                    cronometer.setTime(pomoTime);
+                    currentPomo = CurrentPomo.First;
+                }
+                cronometer.start();
+                nextBreak = !nextBreak;
+                break;
+        }
+    }
+
+    private Cronometer.OnFinish onFinish(){
+        return new Cronometer.OnFinish() {
+            @Override
+            public void onFinishTime() {
+                nextPomo();
+            }
+        };
+    }
+
+    private void reset(){
+        currentPomo = CurrentPomo.First;
+        nextBreak = false;
     }
 }

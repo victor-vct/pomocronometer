@@ -14,10 +14,10 @@ import com.vctapps.pomocronometer.cons.CurrentPomo;
  */
 public class PomoClock extends Service implements ControlCronometer {
 
-    private TextView clock;
     private Cronometer cronometer;
     private CurrentPomo currentPomo = CurrentPomo.First;
     private boolean nextBreak = false;
+    private final long longBreakTime = 1000 * 60 * 30;
     private final long breakTime = 1000 * 60 * 5;
     private final long pomoTime = 1000 * 60 * 25;
 
@@ -49,7 +49,6 @@ public class PomoClock extends Service implements ControlCronometer {
 
     @Override
     public void setClock(TextView clock) {
-        this.clock = clock;
         cronometer.setClock(clock);
     }
 
@@ -102,7 +101,7 @@ public class PomoClock extends Service implements ControlCronometer {
                 break;
             case Fourt:
                 if(nextBreak){
-                    cronometer.setTime(breakTime + 2);
+                    cronometer.setTime(longBreakTime);
                 }else {
                     cronometer.setTime(pomoTime);
                     currentPomo = CurrentPomo.First;

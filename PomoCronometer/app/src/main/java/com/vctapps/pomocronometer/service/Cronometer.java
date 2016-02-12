@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.vctapps.pomocronometer.cons.StatusCronometer;
+
 /**
  * Created by formadoresdosaber on 01/02/16.
  */
@@ -41,7 +43,7 @@ public class Cronometer implements ControlCronometer {
     }
 
     @Override
-    public void onStart(TextView clock) {
+    public void setClock(TextView clock) {
         this.clock = clock;
     }
 

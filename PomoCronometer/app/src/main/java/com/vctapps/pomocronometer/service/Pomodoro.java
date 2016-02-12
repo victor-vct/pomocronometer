@@ -24,7 +24,7 @@ public class Pomodoro implements ControlCronometer {
             PomoClock.CronoBinder conexao = (PomoClock.CronoBinder) service;
             controlCronometer = conexao.getInterface();
             if(clock != null){
-                controlCronometer.onStart(clock);
+                controlCronometer.setClock(clock);
             }
             Log.d(LOG, "Conectado ao service");
         }
@@ -59,7 +59,7 @@ public class Pomodoro implements ControlCronometer {
     }
 
     @Override
-    public void onStart(TextView clock) {
+    public void setClock(TextView clock) {
 
     }
 

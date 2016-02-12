@@ -7,6 +7,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
+import com.vctapps.pomocronometer.cons.CurrentPomo;
+
 /**
  * Created by Victor on 02/02/2016.
  */
@@ -46,9 +48,9 @@ public class PomoClock extends Service implements ControlCronometer {
     }
 
     @Override
-    public void onStart(TextView clock) {
+    public void setClock(TextView clock) {
         this.clock = clock;
-        cronometer.onStart(clock);
+        cronometer.setClock(clock);
     }
 
     @Override

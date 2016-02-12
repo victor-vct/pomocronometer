@@ -7,7 +7,7 @@ import android.widget.TextView;
  */
 public interface ControlCronometer {
 
-    void onStart(TextView clock);
+    void setClock(TextView clock);
     void start();
     void stop();
     boolean isStarted();

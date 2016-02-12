@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.vctapps.pomocronometer.cons.StatusCronometer;
+
 /**
  * Created by formadoresdosaber on 01/02/16.
  */
@@ -13,7 +15,7 @@ public class Cronometer implements ControlCronometer {
     private long lastTime = 0;
     private long cronometer = 0;
     private StatusCronometer STATUS = StatusCronometer.Stoped;
-    private static final String CRONO = "Crono_service";
+    private static final String CRONO = "Crono";
     private OnFinish onFinish;
 
     public interface OnFinish{
@@ -41,7 +43,7 @@ public class Cronometer implements ControlCronometer {
     }
 
     @Override
-    public void onStart(TextView clock) {
+    public void setClock(TextView clock) {
         this.clock = clock;
     }
 
@@ -126,35 +128,4 @@ public class Cronometer implements ControlCronometer {
 
         return timeFormat;
     }
-
-    /*
-    private void runClock(){
-        Log.d(CRONO, "Cronometer run()");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                lastTime = System.currentTimeMillis();
-                while (cronometer > 0) {
-                    if(STATUS == StatusCronometer.Stoped){
-                        Log.d(CRONO, "Cronometer stoped");
-                        break;
-                    }else {
-                        if (System.currentTimeMillis() - lastTime >= 1000) {
-                            cronometer -= 1000;
-                            if(clock != null){
-
-                                clock.setText(cronometer + "");
-                            }
-                            lastTime = System.currentTimeMillis();
-                            Log.d(CRONO, "Cronometer: " + cronometer);
-                        }
-                    }
-                }
-                if(STATUS == StatusCronometer.Started){
-                    onFinish.onFinishTime();
-                }
-                Log.d(CRONO, "Cronometer finished time.");
-            }
-        }).start();
-    }*/
 }

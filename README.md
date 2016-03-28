@@ -9,6 +9,7 @@ Pomodoro pomodoro = new Pomodoro(context, clock, onChangeTime);
 pomodoro.start();
 ```
 Parametros
+
 context - Context
 
 clock - TextView

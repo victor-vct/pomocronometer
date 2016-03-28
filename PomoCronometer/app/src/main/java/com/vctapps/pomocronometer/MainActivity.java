@@ -1,10 +1,5 @@
 package com.vctapps.pomocronometer;
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,8 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.vctapps.pomocronometer.service.ControlCronometer;
-import com.vctapps.pomocronometer.service.PomoClock;
+import com.vctapps.pomocronometer.service.OnChangeTime;
 import com.vctapps.pomocronometer.service.Pomodoro;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         clock = (TextView) findViewById(R.id.clock);
 
-        pomodoro = new Pomodoro(this, clock);
+        pomodoro = new Pomodoro(this, clock, onChangeTime());
 
         Button bt = (Button) findViewById(R.id.start_stop);
 
@@ -37,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(pomodoro == null) {
-                    pomodoro = new Pomodoro(v.getContext(), clock);
+                    pomodoro = new Pomodoro(v.getContext(), clock, onChangeTime());
                 }else{
                     if(pomodoro.isStarted()){
                         pomodoro.stop();
@@ -52,8 +46,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy(){
-        pomodoro.onDestroy();
-        super.onDestroy();
+    protected void onPause(){
+        pomodoro.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume(){
+        pomodoro.onResume();
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop(){
+        pomodoro.onStop();
+        super.onStop();
+    }
+
+    private OnChangeTime onChangeTime(){
+        return new OnChangeTime() {
+            @Override
+            public void onPomo() {
+                Log.d(LOG, "OnPomo() at activity was called.");
+            }
+
+            @Override
+            public void onBreak() {
+                Log.d(LOG, "OnBreak() at activity was called.");
+            }
+        };
     }
 }

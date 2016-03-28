@@ -17,4 +17,11 @@ public enum StatusCronometer {
     public int getStatus(){
         return this.status;
     }
+    public void setStatus(boolean status){
+        if(status){
+            this.status = Started.getStatus();
+        }else{
+            this.status = Stoped.getStatus();
+        }
+    }
 }

@@ -10,7 +10,9 @@ pomodoro.start();
 ```
 Parametros
 context - Context
+
 clock - TextView
+
 onChangeTime - OnChangeTime (Interface callback)
 
 ### Métodos
